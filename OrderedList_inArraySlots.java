@@ -4,8 +4,9 @@
   A list with the invariant the elements are in order by
   increasing value, implemented using a
   ArrayList<Integer>
- */
 
+  Credit to today's class notes on Piazza.
+ */
 public class OrderedList_inArraySlots
     implements OrderedList {
 
@@ -13,14 +14,88 @@ public class OrderedList_inArraySlots
 
 
     /**
-      @return the index of the first occurrence of 
+      @return the index of the first occurrence of
               \findMe in this list, or -1 if
               \findMe is absent from this list.
      */
     public int indexOf( Integer findMe) {
-        return -1;
+        return indexRecursion( list_iAS, findMe);
     }
-    
+
+    public int indexRecursion(java.util.ArrayList<Integer> list, Integer findMe) {
+      int low = 0;
+      int high = list.size() ;
+      int output = -1;
+      boolean IntegerFound = false;
+      int pageToCheck = (low + high / 2);
+
+      if (high - low == 1 && list.get(pageToCheck) != findMe) {
+        //if the findMe is not in the ArrayList
+        System.out.println("It's not in this list.");
+        output = -1;
+      }
+      else if (list.get(pageToCheck) == findMe) {//when you find it
+        System.out.println("We got it");
+        System.out.println(pageToCheck);
+        output = pageToCheck;
+      }
+      else if (list.get(pageToCheck) > findMe) {
+        //recursive case number zero
+        java.util.ArrayList<Integer> frontHalf = list;
+        System.out.println("Checking the front half");
+        while (frontHalf.size() > high - pageToCheck)
+          frontHalf.remove(0);
+        //Construct an ArrayList equivalent to the front half
+        //of the ArrayList we are given by removing the elements
+        //that does not pertain to the part we need.
+        output = indexRecursion(frontHalf, findMe);
+        //recursive call
+      }
+      else {
+        java.util.ArrayList<Integer> backHalf = list;
+        System.out.println("Checking the back half");
+        while (backHalf.size() > pageToCheck - low)
+          backHalf.remove(pageToCheck);
+        output = indexRecursion(backHalf, findMe);
+      }
+      return -1;
+    }
+
+    public int indexWhileStyle( Integer findMe) {
+      int low = 0;
+      int high = size() ;
+      int output = -1;
+      boolean IntegerFound = false;
+
+      while (low < high && IntegerFound == false) {
+        int pageToCheck = (low + high) / 2;
+        /*if (high - low == 1) {
+          System.out.println("narrowed down to 1 page.");
+          IntegerFound = true;
+          output = pageToCheck;
+        }*/
+        if (high - low == 1) {
+
+        }
+        if (get(pageToCheck) == findMe) {
+          output = pageToCheck;
+          IntegerFound = true;
+          System.out.println("We got it");
+          System.out.println(pageToCheck);
+        }
+        else if (get(pageToCheck) > findMe) {
+          high = pageToCheck -1;
+          System.out.println("Checking the front half");
+        }
+        else {
+          low = pageToCheck +1;
+          System.out.println("Checking the back half");
+        }
+      }
+      return output;
+
+    }
+
 
     // ------ code from previous assignments below here ----
 

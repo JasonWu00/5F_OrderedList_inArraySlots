@@ -1,7 +1,7 @@
 public interface OrderedList{
 
     /**
-      @return the index of the first occurrence of 
+      @return the index of the first occurrence of
               \findMe in this list, or -1 if
               \findMe is absent from this list.
      */
