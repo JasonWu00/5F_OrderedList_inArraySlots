@@ -19,51 +19,59 @@ public class OrderedList_inArraySlots
               \findMe is absent from this list.
      */
     public int indexOf( Integer findMe) {
-        return indexWhileStyle( findMe);
+        //return indexOf_recursive(findMe, 0, size());
+        return indexRecursion(0, size(), findMe);
     }
 
-    public int indexRecursion(java.util.ArrayList<Integer> list, Integer findMe) {
-      int low = 0;
-      int high = list.size() ;
+    public int indexRecursion(int low, int high, Integer findMe) {
       int output = -1;
-      boolean IntegerFound = false;
-      int pageToCheck = (low + high / 2);
 
-      if (high - low == 1 && list.get(pageToCheck) != findMe) {
+      if (low > high) {
         //if the findMe is not in the ArrayList
         System.out.println("It's not in this list.");
         output = -1;
       }
 
-      else if (list.get(pageToCheck) == findMe) {//when you find it
-        System.out.println("We got it");
-        System.out.println(pageToCheck);
-        output = pageToCheck;
-      }
-
-      else if (list.get(pageToCheck) > findMe) {
-        //recursive case number zero
-        java.util.ArrayList<Integer> frontHalf = list;
-        System.out.println("Checking the front half");
-        while (frontHalf.size() > high - pageToCheck)
-          frontHalf.remove(0);
-        //Construct an ArrayList equivalent to the front half
-        //of the ArrayList we are given by removing the elements
-        //that does not pertain to the part we need.
-        output = indexRecursion(frontHalf, findMe);
-        //recursive call
-      }
-
       else {
-        java.util.ArrayList<Integer> backHalf = list;
-        System.out.println("Checking the back half");
-        while (backHalf.size() > pageToCheck - low)
-          backHalf.remove(pageToCheck);
-        output = indexRecursion(backHalf, findMe);
+        int pageToCheck = (low + high) /2;
+        //had the divide by 2 inside the parentheses and that broke everything
+        int comparison = findMe.compareTo(list_iAS.get(pageToCheck));
+
+
+        if (comparison == 0) {//when you find it
+          System.out.println("We got it");
+          System.out.println(pageToCheck);
+          return pageToCheck;
+        }
+
+        /*else if (comparison < 0) {
+          //recursive case number zero
+          return indexRecursion(low, pageToCheck-1, findMe);
+          //recursive call
+        }
+
+        else {
+          return indexRecursion(pageToCheck+1, high, findMe);
+        }*/
+        if( comparison == 0)    // detect base case
+            return pageToCheck; // solution other base case
+        // recursive cases
+        else
+            if( comparison < 0)
+                // findMe's spot precedes pageToCheck
+                return indexRecursion( low
+                                     , pageToCheck-1
+                                     , findMe);
+            else
+                // findMe's spot follows pageToCheck
+                return indexRecursion( pageToCheck+1
+                                      , high
+                                      , findMe);
       }
 
-      return -1;
+      return output;
     }
+
 
     public int indexWhileStyle( Integer findMe) {
       int low = 0;
@@ -71,17 +79,19 @@ public class OrderedList_inArraySlots
       int output = -1;
       boolean IntegerFound = false;
 
-      while (low < high && IntegerFound == false) {
+      while (low <= high && IntegerFound == false) {
         int pageToCheck = (low + high) / 2;
+        int comparison = findMe.compareTo(get(pageToCheck));
 
-        if (high - low == 1 && get(pageToCheck) != findMe) {
+        if (high - low == 1 && comparison != 0) {
           //when the method narrows down to 1 page and findMe
           //is not on said page
           System.out.println("It's not in this list.");
-          IntegerFound = true;
+          //IntegerFound = true;
           output = -1;
+          IntegerFound = true;
         }
-        else if (get(pageToCheck) == findMe) {
+        else if (comparison == 0) {
           //when the method finds findMe
           output = pageToCheck;
           IntegerFound = true;
@@ -89,14 +99,14 @@ public class OrderedList_inArraySlots
           System.out.println(pageToCheck);
         }
 
-        else if (get(pageToCheck) > findMe) {
-          //check the back half of the ArrayList
+        else if (comparison < 0) {
+          //check the front half of the ArrayList
           high = pageToCheck -1;
           System.out.println("Checking the front half");
         }
 
         else {
-          //check the front half
+          //check the back half
           low = pageToCheck +1;
           System.out.println("Checking the back half");
         }
@@ -104,7 +114,6 @@ public class OrderedList_inArraySlots
 
       return output;
     }
-
 
     // ------ code from previous assignments below here ----
 
