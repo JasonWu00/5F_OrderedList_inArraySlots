@@ -19,7 +19,7 @@ public class OrderedList_inArraySlots
               \findMe is absent from this list.
      */
     public int indexOf( Integer findMe) {
-        return indexRecursion( list_iAS, findMe);
+        return indexWhileStyle( findMe);
     }
 
     public int indexRecursion(java.util.ArrayList<Integer> list, Integer findMe) {
@@ -34,11 +34,13 @@ public class OrderedList_inArraySlots
         System.out.println("It's not in this list.");
         output = -1;
       }
+
       else if (list.get(pageToCheck) == findMe) {//when you find it
         System.out.println("We got it");
         System.out.println(pageToCheck);
         output = pageToCheck;
       }
+
       else if (list.get(pageToCheck) > findMe) {
         //recursive case number zero
         java.util.ArrayList<Integer> frontHalf = list;
@@ -51,6 +53,7 @@ public class OrderedList_inArraySlots
         output = indexRecursion(frontHalf, findMe);
         //recursive call
       }
+
       else {
         java.util.ArrayList<Integer> backHalf = list;
         System.out.println("Checking the back half");
@@ -58,6 +61,7 @@ public class OrderedList_inArraySlots
           backHalf.remove(pageToCheck);
         output = indexRecursion(backHalf, findMe);
       }
+
       return -1;
     }
 
@@ -69,31 +73,36 @@ public class OrderedList_inArraySlots
 
       while (low < high && IntegerFound == false) {
         int pageToCheck = (low + high) / 2;
-        /*if (high - low == 1) {
-          System.out.println("narrowed down to 1 page.");
-          IntegerFound = true;
-          output = pageToCheck;
-        }*/
-        if (high - low == 1) {
 
+        if (high - low == 1 && get(pageToCheck) != findMe) {
+          //when the method narrows down to 1 page and findMe
+          //is not on said page
+          System.out.println("It's not in this list.");
+          IntegerFound = true;
+          output = -1;
         }
-        if (get(pageToCheck) == findMe) {
+        else if (get(pageToCheck) == findMe) {
+          //when the method finds findMe
           output = pageToCheck;
           IntegerFound = true;
           System.out.println("We got it");
           System.out.println(pageToCheck);
         }
+
         else if (get(pageToCheck) > findMe) {
+          //check the back half of the ArrayList
           high = pageToCheck -1;
           System.out.println("Checking the front half");
         }
+
         else {
+          //check the front half
           low = pageToCheck +1;
           System.out.println("Checking the back half");
         }
       }
-      return output;
 
+      return output;
     }
 
 
